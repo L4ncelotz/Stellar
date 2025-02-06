@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ค้นหาดวงดาวในตัวคุณ</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    <div class="container">
+        <canvas id="resultCanvas" style="display: none;"></canvas>
+        <div class="quiz-wrapper">
+            <div class="cosmic-particles"></div>
+            <h1>✨ Stellar Quiz ✨</h1>
+            <div class="progress-bar">
+                <div id="progress" class="progress"></div>
+            </div>
+            <div id="quiz-container">
+                <div id="question-number" class="question-number">คำถามที่ 1/10</div>
+                <div id="question" class="question"></div>
+                <div id="choices" class="choices"></div>
+                <div class="navigation-buttons">
+                    <button id="prev-btn" class="nav-btn" onclick="previousQuestion()" style="display: none;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                        ย้อนกลับ
+                    </button>
+                </div>
+            </div>
+            <div id="result" style="display: none;">
+                <div class="result-content">
+                    <h2>✨ ผลการค้นหา ✨</h2>
+                    <h3>ดวงดาวของคุณ</h3>
+                    <div id="star-icon" class="star-icon"></div>
+                    <div id="star-result"></div>
+                    <div class="website-url" style="display: none;">project-stellar-ecru.vercel.app</div>
+                    <div class="result-buttons">
+                        <button id="restart-btn" onclick="restartQuiz()" class="restart-btn">
+                            เริ่มทำแบบทดสอบใหม่
+                        </button>
+                        <button id="save-result-btn" class="save-btn">
+                            บันทึกรูปภาพ
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./assets/js/quiz.js"></script>
+</body>
+</html> 
