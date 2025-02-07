@@ -137,10 +137,40 @@ const starIcons = {
 let currentQuestion = 0;
 let answers = new Array(questions.length).fill(null);
 
+// เพิ่มตัวแปรสำหรับตรวจสอบว่าเริ่มเล่นเพลงแล้วหรือยัง
+let hasPlayedMusic = false;
+
+// เพิ่มฟังก์ชันควบคุมเสียง
+let isMusicPlaying = false;
+const bgMusic = document.getElementById('bgMusic');
+const toggleBtn = document.getElementById('toggleAudio');
+const audioOn = toggleBtn.querySelector('.audio-on');
+const audioOff = toggleBtn.querySelector('.audio-off');
+
+function toggleMusic() {
+    if (isMusicPlaying) {
+        bgMusic.pause();
+        audioOn.style.display = 'none';
+        audioOff.style.display = 'block';
+    } else {
+        // เริ่มเล่นเพลงเมื่อผู้ใช้กดปุ่มครั้งแรก
+        bgMusic.play().catch(error => {
+            console.log("Auto-play prevented:", error);
+        });
+        audioOn.style.display = 'block';
+        audioOff.style.display = 'none';
+    }
+    isMusicPlaying = !isMusicPlaying;
+}
+
 function updateProgress() {
     const progress = document.getElementById('progress');
     const percentage = ((currentQuestion + 1) / questions.length) * 100;
     progress.style.width = `${percentage}%`;
+    
+    // เพิ่มดาวตามความก้าวหน้า
+    const stars = '★'.repeat(Math.floor(percentage / 20)) + '☆'.repeat(5 - Math.floor(percentage / 20));
+    progress.setAttribute('data-stars', stars);
 }
 
 function updateQuestionNumber() {
@@ -581,6 +611,43 @@ document.addEventListener('DOMContentLoaded', function() {
     if (saveButton) {
         saveButton.addEventListener('click', saveResult);
     }
+    
+    // เพิ่ม event listener
+    const toggleAudio = document.getElementById('toggleAudio');
+    if (toggleAudio) {
+        toggleAudio.addEventListener('click', toggleMusic);
+    }
+    
+    // จัดการกับเสียงเมื่อแท็บไม่ได้แอคทีฟ
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden && isMusicPlaying) {
+            bgMusic.pause();
+        } else if (!document.hidden && isMusicPlaying) {
+            bgMusic.play().catch(() => {});
+        }
+    });
+
+    // ตั้งค่าเริ่มต้น
+    bgMusic.volume = 0.3;
+    isMusicPlaying = true;
+    
+    // เพิ่ม event listener สำหรับการคลิกครั้งแรก
+    document.addEventListener('click', function startMusic() {
+        if (!hasPlayedMusic) {
+            bgMusic.play().then(() => {
+                hasPlayedMusic = true;
+                audioOn.style.display = 'block';
+                audioOff.style.display = 'none';
+            }).catch(error => {
+                console.log("Auto-play prevented:", error);
+            });
+            // ลบ event listener หลังจากเล่นเพลงแล้ว
+            document.removeEventListener('click', startMusic);
+        }
+    }, { once: true });
 });
+
+// ปรับระดับเสียงให้เหมาะสม
+bgMusic.volume = 0.3;  // ปรับระดับเสียงเป็น 30%
 
 showQuestion();
