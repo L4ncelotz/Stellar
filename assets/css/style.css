@@ -217,7 +217,6 @@ h2 {
 }
 
 .result-content {
-    background: #001B44 !important;
     border-radius: 20px;
     padding: 40px 20px 60px;
     margin: 20px auto;
@@ -790,12 +789,160 @@ body::before {
 /* ปรับแต่งสำหรับการบันทึกภาพ */
 @media print {
     .result-content {
-        background: #001B44 !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
     
     .result-buttons {
         display: none !important;
+    }
+}
+
+/* ปรับแต่งหน้า Landing */
+.landing-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.content {
+    text-align: center;
+    max-width: 700px;
+    padding: 40px;
+    background: rgba(0, 27, 68, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+        0 0 40px rgba(0, 81, 255, 0.1),
+        0 0 80px rgba(0, 81, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+/* เพิ่ม Starfield Effect */
+.content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.2), rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.2), rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 50px 160px, rgba(255, 255, 255, 0.2), rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 90px 40px, rgba(255, 255, 255, 0.2), rgba(0,0,0,0));
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    opacity: 0.2;
+    z-index: -1;
+    animation: twinkle 4s ease-in-out infinite alternate;
+}
+
+.title {
+    font-size: clamp(3rem, 8vw, 5rem);
+    font-weight: 800;
+    background: linear-gradient(
+        45deg,
+        #ffffff 10%,
+        #7aa7ff 30%,
+        #ffffff 50%,
+        #7aa7ff 70%,
+        #ffffff 90%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 20px;
+    text-shadow: 
+        0 0 20px rgba(122, 167, 255, 0.3),
+        0 0 40px rgba(74, 144, 226, 0.2);
+    animation: titleGlow 3s ease-in-out infinite;
+    position: relative;
+}
+
+.description {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    color: #fff;
+    margin-bottom: 30px;
+    text-shadow: 0 0 10px rgba(122, 167, 255, 0.5);
+}
+
+.sub-description {
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.journey-detail {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 25px;
+    margin: 30px 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.journey-detail p {
+    margin: 15px 0;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+}
+
+.start-button {
+    display: inline-block;
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    background: linear-gradient(45deg, #4a90e2, #7aa7ff);
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(74, 144, 226, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.start-button::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    transform: rotate(45deg);
+    animation: buttonGlow 3s ease-in-out infinite;
+}
+
+.start-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 
+        0 0 30px rgba(74, 144, 226, 0.5),
+        0 0 60px rgba(74, 144, 226, 0.3);
+}
+
+@keyframes twinkle {
+    0% {
+        opacity: 0.1;
+    }
+    100% {
+        opacity: 0.3;
+    }
+}
+
+@keyframes buttonGlow {
+    0% {
+        transform: rotate(45deg) translateX(-100%);
+    }
+    100% {
+        transform: rotate(45deg) translateX(100%);
     }
 }

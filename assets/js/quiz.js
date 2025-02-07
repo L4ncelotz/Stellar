@@ -299,8 +299,42 @@ function drawImageProp(ctx, img, centerX, centerY, radius) {
 }
 
 function drawResult(canvas, ctx, centerX, centerY, radius, result) {
+    // วาดดาวประดับ
+    const stars = [
+        { x: 100, y: 150, size: 3 },
+        { x: 200, y: 300, size: 2 },
+        { x: 900, y: 200, size: 4 },
+        { x: 800, y: 400, size: 3 },
+        { x: 150, y: 1700, size: 3 },
+        { x: 900, y: 1600, size: 2 },
+        // เพิ่มดาวตามต้องการ
+    ];
+
+    stars.forEach(star => {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // เพิ่ม glow effect ให้ดาว
+        ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+        ctx.shadowBlur = 10;
+        ctx.fill();
+    });
+    ctx.shadowBlur = 0;
+
+    // วาดหัวข้อด้วย gradient
+    const titleGradient = ctx.createLinearGradient(centerX - 200, 0, centerX + 200, 0);
+    titleGradient.addColorStop(0, '#7aa7ff');
+    titleGradient.addColorStop(0.5, '#ffffff');
+    titleGradient.addColorStop(1, '#7aa7ff');
+    
     ctx.textAlign = 'center';
-    ctx.fillStyle = 'white';
+    ctx.fillStyle = titleGradient;
+    
+    // เพิ่ม glow effect ให้ข้อความ
+    ctx.shadowColor = 'rgba(122, 167, 255, 0.5)';
+    ctx.shadowBlur = 15;
     
     ctx.font = '500 48px Kanit';
     ctx.fillText('✨ ผลการค้นหา ✨', centerX, 200);
@@ -308,30 +342,48 @@ function drawResult(canvas, ctx, centerX, centerY, radius, result) {
     ctx.font = '500 56px Kanit';
     ctx.fillText('ดวงดาวของคุณ', centerX, 280);
     
-    const maxWidth = canvas.width - 100;
-    const lineHeight = 60;
+    // รีเซ็ต shadow
+    ctx.shadowBlur = 0;
+    
+    // วาดข้อความผลลัพธ์
+    const maxWidth = canvas.width - 200; // เพิ่มระยะขอบ
+    const lineHeight = 65; // เพิ่มระยะห่างระหว่างบรรทัด
     const words = result.split(' ');
     let line = '';
-    let y = centerY + radius + 100;
+    let y = centerY + radius + 120;
     
-    ctx.font = '300 36px Kanit';
+    ctx.font = '300 38px Kanit'; // เพิ่มขนาดฟอนต์
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.95)'; // ปรับความสว่าง
     
     words.forEach(word => {
         const testLine = line + word + ' ';
         const metrics = ctx.measureText(testLine);
         
         if (metrics.width > maxWidth) {
+            // เพิ่ม glow effect ให้ข้อความ
+            ctx.shadowColor = 'rgba(255, 255, 255, 0.3)';
+            ctx.shadowBlur = 5;
             ctx.fillText(line, centerX, y);
+            ctx.shadowBlur = 0;
+            
             line = word + ' ';
             y += lineHeight;
         } else {
             line = testLine;
         }
     });
+    ctx.shadowColor = 'rgba(255, 255, 255, 0.3)';
+    ctx.shadowBlur = 5;
     ctx.fillText(line, centerX, y);
+    ctx.shadowBlur = 0;
     
+    // วาด URL ด้านล่าง
     ctx.font = '300 32px Kanit';
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+    const urlGradient = ctx.createLinearGradient(centerX - 150, 0, centerX + 150, 0);
+    urlGradient.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
+    urlGradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.8)');
+    urlGradient.addColorStop(1, 'rgba(255, 255, 255, 0.4)');
+    ctx.fillStyle = urlGradient;
     ctx.fillText('project-stellar-ecru.vercel.app', centerX, canvas.height - 100);
 }
 
@@ -345,14 +397,26 @@ async function generateResultImage() {
         canvas.width = 1080;
         canvas.height = 1920;
         
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+        // วาดพื้นหลัง gradient แบบใหม่
         const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-        gradient.addColorStop(0, '#000428');
-        gradient.addColorStop(0.5, '#004e92');
-        gradient.addColorStop(1, '#000428');
+        gradient.addColorStop(0, '#001B44');
+        gradient.addColorStop(0.3, '#002B69');
+        gradient.addColorStop(0.7, '#002B69');
+        gradient.addColorStop(1, '#001B44');
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // เพิ่มลูกเล่นพื้นหลัง
+        for (let i = 0; i < 50; i++) {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height;
+            const radius = Math.random() * 1.5;
+            
+            ctx.fillStyle = `rgba(255, 255, 255, ${Math.random() * 0.3})`;
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fill();
+        }
 
         const starImg = document.querySelector('#star-icon img');
         if (!starImg) {
